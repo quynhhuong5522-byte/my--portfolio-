@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài tập 33 - Đèn Kéo Quân Giữa Kỳ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1f1c2c, #928dab);
+            color: #fff;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        header h1 {
+            color: #ffdf00;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px rgba(255, 223, 0, 0.6);
+            margin-bottom: 10px;
+        }
+
+        /* --- VÙNG KHÔNG GIAN 3D CỦA ĐÈN KÉO QUÂN --- */
+        .lantern-container {
+            width: 100%;
+            height: 380px;
+            perspective: 1200px; /* Tạo độ sâu góc nhìn 3D */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .lantern-spinner {
+            width: 200px;
+            height: 260px;
+            position: relative;
+            transform-style: preserve-3d;
+            /* Tạo chuyển động xoay tròn liên tục 360 độ quanh trục Y */
+            animation: spinAround 15s linear infinite;
+        }
+
+        /* Định nghĩa hiệu ứng chuyển động xoay */
+        @keyframes spinAround {
+            from { transform: rotateY(0deg); }
+            to { transform: rotateY(360deg); }
+        }
+
+        /* Định dạng chung cho 6 mặt của đèn kéo quân */
+        .lantern-face {
+            position: absolute;
+            width: 200px;
+            height: 260px;
+            left: 0;
+            top: 0;
+            border: 4px solid #ffdf00;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 223, 0, 0.4);
+            cursor: pointer;
+            transition: transform 0.3s, filter 0.3s;
+        }
+
+        .lantern-face img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Giúp ảnh tự co giãn vừa vặn, không bị méo hình */
+        }
+
+        /* Dùng CSS 3D để xếp 6 mặt thành khối lục giác (mỗi mặt lệch nhau 60 độ và đẩy ra xa tâm 200px) */
+        .lantern-face:nth-child(1) { transform: rotateY(0deg) translateZ(200px); }
+        .lantern-face:nth-child(2) { transform: rotateY(60deg) translateZ(200px); }
+        .lantern-face:nth-child(3) { transform: rotateY(120deg) translateZ(200px); }
+        .lantern-face:nth-child(4) { transform: rotateY(180deg) translateZ(200px); }
+        .lantern-face:nth-child(5) { transform: rotateY(240deg) translateZ(200px); }
+        .lantern-face:nth-child(6) { transform: rotateY(300deg) translateZ(200px); }
+
+        /* Hiệu ứng làm sáng mặt ảnh khi rê chuột vào */
+        .lantern-face:hover {
+            filter: brightness(1.2);
+            border-color: #fff;
+        }
+
+        /* --- VÙNG TÍCH HỢP BÀI TẬP 32 & ĐIỀU HƯỚNG --- */
+        .integration-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 25px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .integration-section h2 {
+            color: #00e5ff;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .quiz-result-box {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .quiz-result-box img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border: 2px dashed #00e5ff;
+            padding: 5px;
+        }
+
+        .nav-btn {
+            display: inline-block;
+            background: #ffdf00;
+            color: #1f1c2c;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #fff;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bài tập 33 - Hiệu ứng Đèn Kéo Quân 3D</h1>
+        <p>Kiểm tra giữa kỳ Lập trình Web - Thời gian làm bài 150 phút</p>
+    </header>
+
+    <!-- Khu vực hiển thị hiệu ứng Đèn Kéo Quân -->
+    <div class="lantern-container">
+        <div class="lantern-spinner" id="lantern">
+            <!-- Hiển thị 6 hình ảnh cá nhân của bạn -->
+            <div class="lantern-face"><img src="anh1.jpg" alt="Ảnh cá nhân 1"></div>
+            <div class="lantern-face"><img src="anh2.jpg" alt="Ảnh cá nhân 2"></div>
+            <div class="lantern-face"><img src="anh3.jpg" alt="Ảnh cá nhân 3"></div>
+            <div class="lantern-face"><img src="anh4.jpg" alt="Ảnh cá nhân 4"></div>
+            <div class="lantern-face"><img src="anh5.jpg" alt="Ảnh cá nhân 5"></div>
+            <div class="lantern-face"><img src="anh6.jpg" alt="Ảnh cá nhân 6"></div>
+        </div>
+    </div>
+
+    <!-- Tích hợp kết quả bài tập 32 và liên kết điều hướng -->
+    <div class="integration-section">
+        <h2>Kết quả thực hiện Bài tập 32</h2>
+        <div class="quiz-result-box">
+            <!-- Hiển thị ảnh kết quả của bài 32 -->
+            <img src="bai-tap-32.png" alt="Kết quả Bài tập 32">
+        </div>
+
+        <h2>Kết hợp trang Portfolio chính</h2>
+        <p style="color: #ddd; font-size: 0.95rem; margin-bottom: 15px;">
+            Trang này đã kết nối liên kết hai chiều trực tiếp với sản phẩm Bài tập 32 của bạn.
+        </p>
+        <a href="index.html" class="nav-btn">← Quay lại trang chính Portfolio (Bài 32)</a>
+    </div>
+
+    <!-- XỬ LÝ HIỆU ỨNG JAVASCRIPT: DI CHUỘT VÀO THÌ DỪNG, RÊ CHUỘT RA QUAY TIẾP -->
+    <script>
+        const lantern = document.getElementById('lantern');
+        const faces = document.querySelectorAll('.lantern-face');
+
+        // Sử dụng vòng lặp duyệt qua từng mặt của lồng đèn
+        faces.forEach(function(face) {
+            
+            // Yêu cầu: Khi đưa chuột vào 1 hình nào đó thì đèn dừng lại
+            face.addEventListener('mouseenter', function() {
+                lantern.style.animationPlayState = 'paused';
+            });
+
+            // Yêu cầu: Rê chuột ra thì đèn quay tiếp
+            face.addEventListener('mouseleave', function() {
+                lantern.style.animationPlayState = 'running';
+            });
+        });
+    </script>
+</body>
+</html>
